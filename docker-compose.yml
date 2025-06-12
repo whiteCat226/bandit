@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  server:
+    build: .
+    command: python server.py
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data:/app/data
+    networks:
+      - fl-net
+
+  client1:
+    build: .
+    command: bash -c "sleep 15 && python client.py --client-id 0 --num-clients 3"
+    depends_on:
+      - server
+    volumes:
+      - ./data:/app/data
+    networks:
+      - fl-net
+
+  client2:
+    build: .
+    command: bash -c "sleep 15 && python client.py --client-id 1 --num-clients 3"
+    depends_on:
+      - server
+    volumes:
+      - ./data:/app/data
+    networks:
+      - fl-net
+
+  client3:
+    build: .
+    command: bash -c "sleep 15 && python client.py --client-id 2 --num-clients 3"
+    depends_on:
+      - server
+    volumes:
+      - ./data:/app/data
+    networks:
+      - fl-net
+
+networks:
+  fl-net:
+    driver: bridge
+
